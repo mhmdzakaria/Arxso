@@ -39,6 +39,11 @@
     <link href="css/style.css" rel="stylesheet" />
 
     <link href="https://cdn.jsdelivr.net/npm/glightbox/dist/css/glightbox.min.css" rel="stylesheet">
+    <link
+  rel="stylesheet"
+  href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css"
+/>
+<link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;500;700&display=swap" rel="stylesheet">
 
   </head>
 
@@ -68,6 +73,10 @@
       </div>
       
     </div>
+
+
+
+
     <div class="col-lg-5 px-5 text-end">
       <div class="h-100 d-inline-flex align-items-center">
         <a class="text-white-50 ms-4" href="#"><i class="fab fa-facebook-f"></i></a>
@@ -100,6 +109,29 @@
   >
     <span class="navbar-toggler-icon"></span>
   </button>
+
+
+ <div class="dropdown language-switcher">
+  <button class="btn btn-light lang-btn dropdown-toggle d-flex align-items-center" type="button" id="languageDropdown" data-bs-toggle="dropdown" aria-expanded="false">
+    <img src="https://flagcdn.com/24x18/gb.png" alt="English" class="me-2">
+    <span>ENGLISH</span>
+  </button>
+  <ul class="dropdown-menu" aria-labelledby="languageDropdown">
+    <li>
+      <a class="dropdown-item d-flex justify-content-between align-items-center active" href="#" id="lang-en">
+        <span><img src="https://flagcdn.com/24x18/gb.png" alt="English" class="me-2"> ENGLISH</span>
+        <i class="bi bi-check-lg text-success"></i>
+      </a>
+    </li>
+    <li>
+      <a class="dropdown-item d-flex justify-content-between align-items-center" href="#" id="lang-ar">
+        <span><img src="https://flagcdn.com/24x18/sa.png" alt="Arabic" class="me-2"> عربى</span>
+      </a>
+    </li>
+  </ul>
+</div>
+
+
   <div class="collapse navbar-collapse" id="navbarCollapse">
     <div class="navbar-nav mx-auto bg-light rounded pe-4 py-3 py-lg-0">
       <a href="index.html" class="nav-item nav-link active">Home</a>
@@ -129,11 +161,11 @@
 
 <!-- Carousel Start -->
 <div class="container-fluid p-0 mb-5 wow fadeIn" data-wow-delay="0.1s">
-  <div id="header-carousel" class="carousel slide" data-bs-ride="carousel">
-    <div class="carousel-inner">
+  <div class="swiper mySwiper">
+    <div class="swiper-wrapper">
 
       <!-- Slide 1 -->
-      <div class="carousel-item active">
+      <div class="swiper-slide">
         <img class="w-100" src="img/slide-1.jpg" alt="ARXSO Construction Site" />
         <div class="overlay"></div>
         <div class="carousel-caption d-flex flex-column justify-content-center h-100">
@@ -156,7 +188,7 @@
       </div>
 
       <!-- Slide 2 -->
-      <div class="carousel-item">
+      <div class="swiper-slide">
         <img class="w-100" src="img/slide-2.jpg" alt="ARXSO Vision 2030" />
         <div class="overlay"></div>
         <div class="carousel-caption d-flex flex-column justify-content-center h-100">
@@ -181,17 +213,13 @@
     </div>
 
     <!-- Controls -->
-    <button class="carousel-control-prev" type="button" data-bs-target="#header-carousel" data-bs-slide="prev">
-      <span class="carousel-control-prev-icon" aria-hidden="true"></span>
-      <span class="visually-hidden">Previous</span>
-    </button>
-    <button class="carousel-control-next" type="button" data-bs-target="#header-carousel" data-bs-slide="next">
-      <span class="carousel-control-next-icon" aria-hidden="true"></span>
-      <span class="visually-hidden">Next</span>
-    </button>
+    <div class="swiper-button-next"></div>
+    <div class="swiper-button-prev"></div>
+    <div class="swiper-pagination"></div>
   </div>
 </div>
 <!-- Carousel End -->
+
 
 
 
@@ -922,5 +950,87 @@
 <script>
   const lightbox = GLightbox({ selector: '.glightbox' });
 </script>
+
+<script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
+
+<script>
+let swiper;
+
+function initSwiper() {
+  if (swiper) swiper.destroy(true, true);
+
+  swiper = new Swiper(".mySwiper", {
+    loop: true,
+    autoplay: {
+      delay: 5000,
+    },
+    rtl: document.documentElement.getAttribute("dir") === "rtl",
+    navigation: {
+      nextEl: ".swiper-button-next",
+      prevEl: ".swiper-button-prev",
+    },
+    pagination: {
+      el: ".swiper-pagination",
+      clickable: true,
+    },
+  });
+}
+
+// init on page load
+initSwiper();
+
+// if you have language buttons
+const dropdownButton = document.getElementById("languageDropdown");
+const enItem = document.getElementById("lang-en");
+const arItem = document.getElementById("lang-ar");
+
+function setLanguage(lang) {
+  if (lang === "en") {
+    document.documentElement.setAttribute("dir", "ltr");
+    dropdownButton.innerHTML = `
+      <img src="https://flagcdn.com/24x18/gb.png" alt="English" class="me-2">
+      <span>ENGLISH</span>
+    `;
+    enItem.classList.add("active");
+    arItem.classList.remove("active");
+
+    if (!enItem.querySelector("i")) {
+      enItem.innerHTML += `<i class="bi bi-check-lg text-success"></i>`;
+    }
+    if (arItem.querySelector("i")) {
+      arItem.querySelector("i").remove();
+    }
+  } else {
+    document.documentElement.setAttribute("dir", "rtl");
+    dropdownButton.innerHTML = `
+      <img src="https://flagcdn.com/24x18/sa.png" alt="Arabic" class="me-2">
+      <span>عربى</span>
+    `;
+    arItem.classList.add("active");
+    enItem.classList.remove("active");
+
+    if (!arItem.querySelector("i")) {
+      arItem.innerHTML += `<i class="bi bi-check-lg text-success"></i>`;
+    }
+    if (enItem.querySelector("i")) {
+      enItem.querySelector("i").remove();
+    }
+  }
+
+  initSwiper();
+}
+
+enItem?.addEventListener("click", (e) => {
+  e.preventDefault();
+  setLanguage("en");
+});
+
+arItem?.addEventListener("click", (e) => {
+  e.preventDefault();
+  setLanguage("ar");
+});
+</script>
+
+
   </body>
 </html>
